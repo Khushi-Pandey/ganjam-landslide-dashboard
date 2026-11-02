@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ganjam Landslide | BhoomiCam</title>
+<meta name="description" content="Satellite assessment of the Ganjam landslide, Odisha, by BhoomiCam.">
+<link rel="icon" href="img/Bhoomicam_Logo_Green.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="#map" aria-label="BhoomiCam, back to map"><img src="img/Bhoomicam_Logo_White.png" alt="BhoomiCam" width="74" height="44"></a>
+  <nav aria-label="Sections">
+    <a href="#map">Map</a><a href="#time">Timeline</a><a href="#compare">Before and after</a><a href="#places">Locations</a><a href="#exposure">At risk</a><a href="#method">Method</a><a href="#contact">Contact</a>
+  </nav>
+  <span class="stamp">Updated 2 Nov 2026</span>
+</header>
+
+<main>
+<section id="map" class="explorer">
+  <aside class="panel" aria-label="Map layers">
+    <h1>Ganjam landslide</h1>
+    <p class="lede">Ganjam-Kandhamal border, Odisha. Cyclone Arnab rain brought mud and boulders down a hillside on 28 October 2026.</p>
+    <div class="basepick" role="radiogroup" aria-label="Background image" id="basePick"></div>
+    <div id="layerList"></div>
+    <p class="note">Radar and quick-view findings. Field teams should check each place on the ground.</p>
+  </aside>
+  <div class="mapwrap">
+    <div id="mapX" class="map"></div>
+    <div class="jump" id="jump" aria-label="Go to place"></div>
+    <div class="coord" id="coord" aria-live="off">Move over the map</div>
+  </div>
+</section>
+
+<section id="time" class="band pine">
+  <svg class="contour" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <div class="wrap">
+    <h2>Every satellite pass, against the rain</h2>
+    <p class="sub">Pick a pass to see it on the map. Clouds hid the ground from 27 October until PlanetScope's cloud gaps on 1 November. Only radar saw through on 30 October.</p>
+    <div class="stripwrap"><svg id="strip" viewBox="0 0 1200 208" role="group" aria-label="Rain and satellite passes"></svg></div>
+    <div class="timebar">
+      <button id="play" class="btn" type="button"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path id="playIcon" d="M2 1l9 5-9 5z" fill="currentColor"/></svg><span id="playText">Play</span></button>
+      <p id="frameLabel" class="framelabel" aria-live="polite"></p>
+    </div>
+  </div>
+  <div id="mapT" class="map wide"></div>
+</section>
+
+<section id="compare" class="band mist">
+  <div class="wrap">
+    <h2>Before and after, same ground</h2>
+    <p class="sub">Drag the handle. On 1 November the stream below Tadama shows pale and scoured, with red-brown silt at Baiballi.</p>
+    <div class="tabs" id="cmpTabs" role="tablist" aria-label="Image pair"></div>
+  </div>
+  <div class="swipe" id="swipe">
+    <div id="cmpA" class="map"></div>
+    <div id="cmpB" class="map clip"></div>
+    <div class="handle" id="handle" role="slider" tabindex="0" aria-label="Compare position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span></span></div>
+    <span class="tag left" id="tagA"></span><span class="tag right" id="tagB"></span>
+    <div class="jump inside" id="cmpJump"></div>
+  </div>
+</section>
+
+<section id="places" class="scrolly">
+  <div class="scrollytext">
+    <h2>Where to look</h2>
+    <p class="sub">Ten places, best lead first. The map follows as you scroll.</p>
+    <div id="locList"></div>
+  </div>
+  <div class="scrollymap"><div id="mapS" class="map"></div></div>
+</section>
+
+<section id="exposure" class="band mist">
+  <div class="wrap">
+    <h2>Homes and roads in harm's way</h2>
+    <p class="sub">Each building was checked against radar changes, debris paths, low ground beside streams, and slope risk.</p>
+    <div class="twocol">
+      <div>
+        <h3>Buildings</h3>
+        <div id="barsB" class="bars"></div>
+        <h3 class="gap">Roads</h3>
+        <div id="barsR" class="bars"></div>
+      </div>
+      <div>
+        <h3>Settlements to check first</h3>
+        <table class="data" id="hot"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="method" class="band pine">
+  <svg class="contour" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <div class="wrap">
+    <h2>How we read it</h2>
+    <div class="twocol">
+      <div>
+        <h3>What a sudden radar drop means</h3>
+        <svg class="drop" viewBox="0 0 560 220" role="img" aria-label="Forest scatters radar back and looks bright. Wet mud or water bounces it away and looks dark.">
+          <rect x="0" y="176" width="270" height="44" fill="#5d4c35"/><rect x="290" y="176" width="270" height="44" fill="#4b3c2a"/><rect x="290" y="166" width="270" height="10" fill="#9a8460"/>
+          <g fill="#2f8a5c"><ellipse cx="50" cy="116" rx="27" ry="36"/><ellipse cx="110" cy="116" rx="27" ry="36"/><ellipse cx="170" cy="116" rx="27" ry="36"/><ellipse cx="230" cy="116" rx="27" ry="36"/></g>
+          <g fill="#5d4c35"><rect x="46" y="148" width="8" height="30"/><rect x="106" y="148" width="8" height="30"/><rect x="166" y="148" width="8" height="30"/><rect x="226" y="148" width="8" height="30"/></g>
+          <g stroke-width="3" fill="none" stroke-linecap="round">
+            <path d="M262 14 L150 98" stroke="#9fd4ff"/><path d="M150 98 L240 22M150 98L262 48M150 98L268 72" stroke="#ffb25a"/>
+            <path d="M552 14 L430 164" stroke="#9fd4ff"/><path d="M430 164 L304 30" stroke="#ffb25a"/>
+          </g>
+          <text x="10" y="210" class="l">Forest: bright on radar</text><text x="300" y="210" class="l">Wet mud or water: dark</text>
+        </svg>
+        <p class="body">A drop of 3 dB means about half the signal is gone. The surface changed between two passes: trees lost, or ground covered by mud or water. Radar alone cannot separate mud from water, so we use terrain, drainage size and optical images too.</p>
+      </div>
+      <div>
+        <h3>Does the signal stand out?</h3>
+        <div id="valid"></div>
+      </div>
+    </div>
+    <h3 class="gap">Steps</h3>
+    <ol class="steps">
+      <li><b>Radar</b> Six Sentinel-1 passes, terrain corrected, 10 m. Bad radar angles removed.</li>
+      <li><b>Change</b> 30 Oct against five earlier passes, with wide-area wetness removed.</li>
+      <li><b>Terrain</b> DEM slope, drainage, catchment and height above stream sort slope failure from flood.</li>
+      <li><b>Optical</b> Sentinel-2 and PlanetScope quick views, including the 1 Nov cloud gaps.</li>
+      <li><b>Exposure</b> 51,418 building footprints and road sections tested against each hazard.</li>
+    </ol>
+    <h3 class="gap">PlanetScope passes over the site</h3>
+    <div class="stripwrap"><svg id="passes" viewBox="0 0 1200 170" role="img" aria-label="PlanetScope passes by date and how clear they were"></svg></div>
+    <p class="body small">PlanetScope views here are quick looks at about 70 m. Full 3 m images of 22 October and 1 November would show the village itself.</p>
+  </div>
+</section>
+</main>
+
+<footer id="contact" class="foot">
+  <svg class="contour" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <img src="img/Bhoomicam_Logo_White.png" alt="BhoomiCam" width="150" height="89">
+  <div>
+    <h2>Contact BhoomiCam</h2>
+    <p><a href="mailto:support@bhoomicam.com">support@bhoomicam.com</a><br><a href="tel:+919045865902">+91 9045865902</a><br><a href="https://www.bhoomicam.com">www.bhoomicam.com</a></p>
+    <p><a class="btn light" href="bhoomicam_locations.kml" download>Download coordinates (KML)</a></p>
+  </div>
+</footer>
+
+<script src="vendor/maplibre-gl.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
