@@ -26,7 +26,7 @@
 <section id="map" class="explorer">
   <aside class="panel" aria-label="Map layers">
     <h1>Ganjam landslide</h1>
-    <p class="lede">Ganjam-Kandhamal border, Odisha. Cyclone Arnab rain brought mud and boulders down a hillside on 28 October 2026.</p>
+    <p class="lede">Ganjam-Kandhamal border, Odisha. 28 October 2026.</p>
     <div class="basepick" role="radiogroup" aria-label="Background image" id="basePick"></div>
     <div id="layerMain"></div>
     <details class="more"><summary>More layers</summary><div id="layerMore"></div></details>
@@ -41,7 +41,6 @@
 <section id="places" class="placesec">
   <div class="placetext">
     <h2>20 places, by type</h2>
-    <p class="sub">Type comes from radar, slope, drainage and imagery. Pick a place to see it.</p>
     <div class="chips" id="chips" role="group" aria-label="Filter by type"></div>
     <div id="locList"></div>
     <a class="btn" href="bhoomicam_locations.kml" download>Download coordinates (KML)</a>
@@ -52,7 +51,6 @@
 <section id="time" class="band">
   <div class="wrap">
     <h2>Every satellite pass, against the rain</h2>
-    <p class="sub">Clouds hid the ground from 27 October. Only radar saw through on 30 October. PlanetScope found gaps on 1 November.</p>
     <div class="stripwrap"><svg id="strip" viewBox="0 0 1200 196" role="group" aria-label="Rain and satellite passes"></svg></div>
     <div class="timebar">
       <button id="play" class="btn" type="button"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path id="playIcon" d="M2 1l9 5-9 5z" fill="currentColor"/></svg><span id="playText">Play</span></button>
@@ -65,7 +63,7 @@
 <section id="compare" class="band tint">
   <div class="wrap">
     <h2>Before and after, same ground</h2>
-    <p class="sub">Drag the handle. By 1 November the stream below Tadama is pale and scoured, with red-brown silt at Baiballi.</p>
+    <p class="sub">Drag the handle.</p>
     <div class="tabs" id="cmpTabs" role="tablist" aria-label="Image pair"></div>
     <div class="swipe" id="swipe">
       <div id="cmpA" class="map"></div>
@@ -80,7 +78,6 @@
   <div class="wrap twocol">
     <div>
       <h2>Homes and roads in harm's way</h2>
-      <p class="sub">51,418 buildings and every road, tested against radar changes, debris paths, low ground and slope risk.</p>
       <dl class="tally" id="tally"></dl>
     </div>
     <div>
@@ -94,19 +91,19 @@
   <div class="wrap twocol">
     <div>
       <h2>How we read it</h2>
-      <p class="sub">A radar drop of 3 dB means half the signal is gone: trees lost, or ground covered by mud or water. Terrain and optical images separate the two.</p>
+      <p class="sub">A 3 dB radar drop means half the signal is gone.</p>
       <ol class="steps">
-        <li><b>Radar</b><span>Six Sentinel-1 passes, terrain corrected, 10 m.</span></li>
-        <li><b>Change</b><span>30 Oct against five earlier passes. Bad radar angles and wide-area wetness removed.</span></li>
-        <li><b>Terrain</b><span>DEM slope, drainage, catchment and height above stream sort slides from floods.</span></li>
-        <li><b>Optical</b><span>Sentinel-2 and PlanetScope quick views at about 70 m, including the 1 Nov cloud gaps.</span></li>
-        <li><b>Exposure</b><span>Building footprints and roads tested against each hazard.</span></li>
+        <li><b>Radar</b><span>Six Sentinel-1 passes, 10 m.</span></li>
+        <li><b>Change</b><span>30 Oct against five earlier passes.</span></li>
+        <li><b>Terrain</b><span>DEM slope and drainage.</span></li>
+        <li><b>Optical</b><span>Sentinel-2 and PlanetScope, about 70 m.</span></li>
+        <li><b>Exposure</b><span>51,418 buildings and all roads.</span></li>
       </ol>
     </div>
     <div>
       <h3>Does the signal stand out?</h3>
       <table class="data" id="valid"></table>
-      <p class="sub small">10 of 12 slope drops fall in the high susceptibility class, which covers 15% of hill land.</p>
+      <p class="sub small">10 of 12 slope drops fall in the top 15% risk class.</p>
     </div>
   </div>
 </section>
