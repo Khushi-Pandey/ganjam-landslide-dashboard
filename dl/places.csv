@@ -1,0 +1,21 @@
+num,name,cls,rating,lat,lon,mapped_ha,drop,t3,t2,planet_after,s2_after_cloud
+H,Best-match hamlet,site,Best match,20.0028,84.3362,0.0,,0,7,clear,100
+1,Tadama stream,debris,Strong,19.9911,84.353,3.9,-3.3,0,16,clear,100
+2,West arm,debris,Strong,19.9929,84.3393,1.4,-3.7,0,0,clear,100
+3,South-west hill,slope,Possible,19.9847,84.3238,1.3,-3.3,0,0,part,100
+4,North hill,slope,Possible,20.0175,84.3508,0.8,-3.1,0,0,part,100
+5,Stream near Balingia,debris,Possible,19.9997,84.3107,0.4,-3.4,0,4,clear,100
+6,South slopes,slope,Weak,19.9709,84.3319,0.3,-3.0,0,1,clear,100
+7,Baiballi valley,flood,Strong,19.9587,84.4023,18.8,-4.2,1,47,clear,100
+8,Side stream at Baiballi,debris,Possible,19.9614,84.4088,0.7,-3.8,1,1,clear,100
+9,North stream,debris,Possible,20.0058,84.3469,1.7,-2.5,0,0,clear,100
+10,Gorge stream,debris,Possible,19.9724,84.3723,1.4,-2.6,0,0,clear,100
+11,South gully,debris,Possible,19.9699,84.3401,0.1,-3.2,0,0,clear,100
+12,South ridge,slope,Possible,19.9449,84.3646,0.2,-3.1,0,0,part,100
+13,Ridge near Kilapanga,slope,Weak,20.0138,84.2956,0.1,-2.7,0,0,clear,100
+14,North-east tank,flood,Possible,20.0008,84.4055,1.5,-4.8,0,15,clear,100
+15,Lower valley,flood,Strong,19.9546,84.446,8.2,-5.9,0,0,none,100
+16,Reservoir edge,flood,Strong,19.972,84.4539,3.7,-7.8,2,3,none,100
+17,River bank village,flood,Strong,19.9612,84.4879,13.4,-3.8,0,71,none,100
+18,Main river,flood,Strong,19.9474,84.508,14.7,-4.2,0,19,none,92
+19,Upland tank,water,Weak,20.0585,84.2672,0.7,-3.4,0,17,cloud,100

@@ -2,121 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>Ganjam Landslide | BhoomiCam</title>
-<meta name="description" content="Satellite assessment of the Ganjam landslide, Odisha, by BhoomiCam.">
+<title>Ganjam Damage | BhoomiCam</title>
+<meta name="description" content="Satellite damage assessment of the Ganjam landslide, Odisha, by BhoomiCam.">
 <link rel="icon" href="img/Bhoomicam_Logo_Green.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/maplibre-gl.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="bar">
-  <a class="brand" href="#map" aria-label="BhoomiCam, back to map"><img src="img/Bhoomicam_Logo_Green.png" alt="BhoomiCam"></a>
-  <nav aria-label="Sections">
-    <a href="#map">Map</a><a href="#places">Places</a><a href="#time">Timeline</a><a href="#compare">Before and after</a><a href="#exposure">At risk</a><a href="#method">Method</a>
+<div class="app" id="app">
+  <nav class="rail" aria-label="Views">
+    <a class="logo" href="https://www.bhoomicam.com" aria-label="BhoomiCam website"><img src="img/Bhoomicam_Logo_White.png" alt="BhoomiCam"></a>
+    <div class="railbtns" id="rail"></div>
   </nav>
-  <span class="stamp">Updated 3 Nov 2026</span>
-</header>
-
-<main>
-<section id="map" class="explorer">
-  <aside class="panel" aria-label="Map layers">
-    <h1>Ganjam landslide</h1>
-    <p class="lede">Ganjam-Kandhamal border, Odisha. 28 October 2026.</p>
-    <div class="basepick" role="radiogroup" aria-label="Background image" id="basePick"></div>
-    <div id="layerMain"></div>
-    <details class="more"><summary>More layers</summary><div id="layerMore"></div></details>
-  </aside>
-  <div class="mapwrap">
-    <div id="mapX" class="map"></div>
-    <div class="jump" id="jump" aria-label="Go to place"></div>
-    <div class="coord" id="coord" aria-live="off">Move over the map</div>
-  </div>
-</section>
-
-<section id="places" class="placesec">
-  <div class="placetext">
-    <h2>20 places, by type</h2>
-    <div class="chips" id="chips" role="group" aria-label="Filter by type"></div>
-    <div id="locList"></div>
-    <a class="btn" href="bhoomicam_locations.kml" download>Download coordinates (KML)</a>
-  </div>
-  <div class="placemap"><div id="mapS" class="map"></div></div>
-</section>
-
-<section id="time" class="band">
-  <div class="wrap">
-    <h2>Every satellite pass, against the rain</h2>
-    <div class="stripwrap"><svg id="strip" viewBox="0 0 1200 196" role="group" aria-label="Rain and satellite passes"></svg></div>
-    <div class="timebar">
-      <button id="play" class="btn" type="button"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path id="playIcon" d="M2 1l9 5-9 5z" fill="currentColor"/></svg><span id="playText">Play</span></button>
-      <p id="frameLabel" class="framelabel" aria-live="polite"></p>
+  <aside class="panel" aria-label="Details"><div id="panel" class="panelbody"></div></aside>
+  <main class="stage" id="stage">
+    <div id="mapA" class="map"></div>
+    <div id="mapB" class="map clip" hidden></div>
+    <div class="imagebar" id="imagebar" role="group" aria-label="Image on the map"></div>
+    <div class="toast" id="toast" aria-live="polite" hidden></div>
+    <div class="mapkey" id="mapkey" hidden></div>
+    <div class="loading" id="loading" hidden><span class="spin"></span><span id="loadingText">Loading image</span></div>
+    <div class="coord" id="coord" aria-hidden="true"></div>
+    <div class="swipe" id="swipe" hidden>
+      <div class="handle" id="handle" role="slider" tabindex="0" aria-label="Before and after position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <span class="grip"><svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2 2 7l5 5M15 2l5 5-5 5"/></svg></span>
+      </div>
+      <div class="sidetag before" id="tagA"></div>
+      <div class="sidetag after" id="tagB"></div>
     </div>
-    <div class="mapframe"><div id="mapT" class="map"></div></div>
-  </div>
-</section>
-
-<section id="compare" class="band tint">
-  <div class="wrap">
-    <h2>Before and after, same ground</h2>
-    <p class="sub">Drag the handle.</p>
-    <div class="tabs" id="cmpTabs" role="tablist" aria-label="Image pair"></div>
-    <div class="swipe" id="swipe">
-      <div id="cmpA" class="map"></div>
-      <div id="cmpB" class="map clip"></div>
-      <div class="handle" id="handle" role="slider" tabindex="0" aria-label="Compare position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span></span></div>
-      <span class="tag left" id="tagA"></span><span class="tag right" id="tagB"></span>
-    </div>
-  </div>
-</section>
-
-<section id="exposure" class="band">
-  <div class="wrap twocol">
-    <div>
-      <h2>Homes and roads in harm's way</h2>
-      <dl class="tally" id="tally"></dl>
-    </div>
-    <div>
-      <h3>Settlements to check first</h3>
-      <table class="data" id="hot"></table>
-    </div>
-  </div>
-</section>
-
-<section id="method" class="band tint">
-  <div class="wrap twocol">
-    <div>
-      <h2>How we read it</h2>
-      <p class="sub">A 3 dB radar drop means half the signal is gone.</p>
-      <ol class="steps">
-        <li><b>Radar</b><span>Six Sentinel-1 passes, 10 m.</span></li>
-        <li><b>Change</b><span>30 Oct against five earlier passes.</span></li>
-        <li><b>Terrain</b><span>DEM slope and drainage.</span></li>
-        <li><b>Optical</b><span>Sentinel-2 and PlanetScope, about 70 m.</span></li>
-        <li><b>Exposure</b><span>51,418 buildings and all roads.</span></li>
-      </ol>
-    </div>
-    <div>
-      <h3>Does the signal stand out?</h3>
-      <table class="data" id="valid"></table>
-      <p class="sub small">10 of 12 slope drops fall in the top 15% risk class.</p>
-    </div>
-  </div>
-</section>
-</main>
-
-<footer id="contact" class="foot">
-  <img src="img/Bhoomicam_Logo_Green.png" alt="BhoomiCam">
-  <p><a href="mailto:support@bhoomicam.com">support@bhoomicam.com</a><a href="tel:+919045865902">+91 9045865902</a><a href="https://www.bhoomicam.com">www.bhoomicam.com</a></p>
-</footer>
-
+    <div class="matrix" id="matrix" hidden></div>
+    <div class="dock" id="dock" hidden></div>
+  </main>
+</div>
 <script src="vendor/maplibre-gl.js"></script>
 <script src="data.js"></script>
-<script src="places.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
