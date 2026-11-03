@@ -30,7 +30,7 @@ const cloudOf = (s, d) => s === 's2' ? (DATA.passes.s2.find(p => p.d === d)?.clo
 const datesOf = s => (DATA.frames[s] || []).filter(d => s === 's1' || d >= '2026-10-01');
 const FR = {};
 Object.entries(DATA.frames).forEach(([s, days]) => {
-  FR[s] = days.map(d => ({ d, t: dayOf(d) + (s === 's1' ? .01 : .22), id: `fr_${s}_${d}`, src: `f/${s}_${d}.webp`, box: boxOf(s), s }));
+  FR[s] = days.map(d => ({ d, t: dayOf(d) + (s === 's1' ? .01 : .22), id: `fr_${s}_${d}`, src: `data/frames/${s}_${d}.webp`, box: boxOf(s), s }));
 });
 function bestDate(s, after) {
   const list = datesOf(s).filter(d => (after ? d >= EVENT : d < EVENT));
@@ -95,7 +95,7 @@ const ready = new Promise(res => map.on('load', () => {
   map.addSource('near', { type: 'geojson', data: GEO.bnear });
   map.addSource('rivers', { type: 'geojson', data: GEO.rivers });
   map.addSource('roads', { type: 'geojson', data: GEO.roads });
-  map.addSource('bld', { type: 'image', url: 'b/buildings.webp', coordinates: corners(BOX) });
+  map.addSource('bld', { type: 'image', url: 'data/buildings.webp', coordinates: corners(BOX) });
   const round = { 'line-cap': 'round', 'line-join': 'round' };
   map.addLayer({ id: 'river', type: 'line', source: 'rivers', layout: round, paint: { 'line-color': '#3d9bf0', 'line-width': ['interpolate', ['linear'], ['zoom'], 10, ['match', ['get', 'class'], 3, 2, 2, 1.2, .6], 15, ['match', ['get', 'class'], 3, 5, 2, 3, 1.6]] } });
   map.addLayer({ id: 'road_c', type: 'line', source: 'roads', layout: round, paint: { 'line-color': '#1b1b1b', 'line-opacity': .7, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2.4, 15, 6] } });
@@ -155,7 +155,7 @@ function openPatch(id, m = map) {
   if (!p) return;
   state.patch = id;
   document.querySelectorAll('[data-patch]').forEach(b => b.setAttribute('aria-current', +b.dataset.patch === id));
-  const tile = (r, k, label) => `<div class="chip" style="background-image:url(c/${id}.webp);background-position:${k * 100}% ${r * 50}%"><i>${label}</i></div>`;
+  const tile = (r, k, label) => `<div class="chip" style="background-image:url(data/previews/${id}.webp);background-position:${k * 100}% ${r * 50}%"><i>${label}</i></div>`;
   const pl = d => (d ? fmt(d) + (d === '2026-10-27' ? ', cloud' : '') : 'No image');
   const card = $('#pvcard');
   card.innerHTML = `<button class="pvx" type="button" aria-label="Close">×</button><div class="pv"><h3>Patch ${id}<span>${p.ha} ha</span></h3><div class="where">${p.where}${p.stream ? ', along a stream' : ''}</div>
@@ -244,7 +244,7 @@ function ensureB() {
   return mapB.__ready;
 }
 function setImg(m, s, d) {
-  const src = s === 'sat' ? null : s === 's1' ? `f/s1g_${d}.webp` : `f/${s}_${d}.webp`;
+  const src = s === 'sat' ? null : s === 's1' ? `data/frames/s1g_${d}.webp` : `data/frames/${s}_${d}.webp`;
   if (!src) { setVis(m, 'cmp', false); return; }
   if (m.getSource('cmp')) m.getSource('cmp').updateImage({ url: src, coordinates: corners(boxOf(s)) });
   else { m.addSource('cmp', { type: 'image', url: src, coordinates: corners(boxOf(s)) }); m.addLayer({ id: 'cmp', type: 'raster', source: 'cmp', paint: { 'raster-fade-duration': 0 } }, 'anchor'); }
@@ -301,7 +301,7 @@ function renderSide() {
   } else {
     const st = [[S.ha, 'ha damage detected', 1], [S.patches, 'damage patches'], [S.buildings.near, 'buildings within 100 m'], [S.rivers.in.toFixed(1), 'km of river in damage']];
     html = `<section><h2>Damage on 30 Oct</h2><div class="stats">${st.map(([v, l, hot]) => `<div class="stat${hot ? ' hot' : ''}"><b>${v}</b><span>${l}</span></div>`).join('')}</div></section>
-      <section><h2>Patches, largest first</h2><div class="plist">${GEO.damage.features.map(({ properties: p }) => `<button class="prow" type="button" data-patch="${p.id}" aria-current="${p.id === state.patch}"><span class="th" style="background-image:url(c/${p.id}.webp)"></span><span><b>Patch ${p.id}<span>${p.ha} ha</span></b><small>${p.where}</small><small>${p.elev} m, radar ${p.dVV} dB</small></span></button>`).join('')}</div></section>`;
+      <section><h2>Patches, largest first</h2><div class="plist">${GEO.damage.features.map(({ properties: p }) => `<button class="prow" type="button" data-patch="${p.id}" aria-current="${p.id === state.patch}"><span class="th" style="background-image:url(data/previews/${p.id}.webp)"></span><span><b>Patch ${p.id}<span>${p.ha} ha</span></b><small>${p.where}</small><small>${p.elev} m, radar ${p.dVV} dB</small></span></button>`).join('')}</div></section>`;
   }
   $('#side').innerHTML = html;
   if (t === 'timeline') paintFrames(tl.t);

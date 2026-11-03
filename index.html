@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/maplibre-gl.css">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="app" id="app" data-tab="timeline">
@@ -42,8 +42,8 @@
     </header>
     <div id="side"></div>
     <footer class="foot">
-      <a href="dl/damage_patches.geojson" download>Damage patches (GeoJSON)</a>
-      <a href="dl/radar_passes.csv" download>Radar passes (CSV)</a>
+      <a href="downloads/damage_patches.geojson" download>Damage patches (GeoJSON)</a>
+      <a href="downloads/radar_passes.csv" download>Radar passes (CSV)</a>
       <p>Sentinel-1 and Sentinel-2: Copernicus, via Sentinel Hub. PlanetScope: Planet. Satellite basemap: Esri.</p>
     </footer>
   </aside>
@@ -65,7 +65,7 @@
 </div>
 <div class="tip" id="tip" hidden></div>
 <script src="vendor/maplibre-gl.js"></script>
-<script src="data.js"></script>
-<script src="app.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
