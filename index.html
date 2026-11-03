@@ -14,9 +14,22 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
-  <main class="stage">
+<div class="app" id="app" data-tab="timeline">
+  <nav class="rail" aria-label="Views">
+    <a class="logo" href="https://www.bhoomicam.com" aria-label="BhoomiCam website"><img src="img/Bhoomicam_Logo_White.png" alt="BhoomiCam"></a>
+    <div id="tabs" role="tablist"></div>
+  </nav>
+
+  <main class="stage" id="stage">
     <div id="map" class="map"></div>
+    <div id="mapB" class="map clip" hidden></div>
+    <div class="swipe" id="swipe" hidden>
+      <div class="handle" id="handle" role="slider" tabindex="0" aria-label="Before and after position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <span class="grip"><svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2 2 7l5 5M15 2l5 5-5 5"/></svg></span>
+      </div>
+      <div class="sidetag before" id="tagA"></div>
+      <div class="sidetag after" id="tagB"></div>
+    </div>
     <div class="event" id="event" aria-live="polite" hidden></div>
     <div class="loading" id="loading" hidden><span class="spin"></span><span id="loadingText">Loading images</span></div>
     <div class="coord" id="coord" aria-hidden="true"></div>
@@ -24,22 +37,13 @@
 
   <aside class="side">
     <header class="brand">
-      <a href="https://www.bhoomicam.com" aria-label="BhoomiCam website"><img src="img/Bhoomicam_Logo_Green.png" alt="BhoomiCam"></a>
-      <div><h1>Ganjam landslide</h1><p>Odisha. Storm of 28 Oct 2026</p></div>
+      <h1>Ganjam landslide</h1><p>Odisha. Storm of 28 Oct 2026</p>
     </header>
-    <section>
-      <h2>Basemap</h2>
-      <div class="bases" id="bases" role="radiogroup" aria-label="Basemap"></div>
-      <div class="baselegend" id="baselegend"></div>
-    </section>
-    <section>
-      <h2>Layers</h2>
-      <div id="layers"></div>
-    </section>
+    <div id="side"></div>
     <footer class="foot">
       <a href="dl/damage_patches.geojson" download>Damage patches (GeoJSON)</a>
       <a href="dl/radar_passes.csv" download>Radar passes (CSV)</a>
-      <p>Sentinel-1 and Sentinel-2: Copernicus. PlanetScope: Planet. Satellite basemap: Esri.</p>
+      <p>Sentinel-1 and Sentinel-2: Copernicus, via Sentinel Hub. PlanetScope: Planet. Satellite basemap: Esri.</p>
     </footer>
   </aside>
 
@@ -54,10 +58,7 @@
     </div>
     <div class="info">
       <div class="kpis" id="kpis"></div>
-      <div class="charts">
-        <div class="chart"><h3>Land hit on 30 Oct</h3><div id="lulc"></div></div>
-        <div class="chart"><h3>Radar signal (dB), every pass</h3><div id="passes"></div></div>
-      </div>
+      <div class="chart"><h3>Radar signal at the damaged spots, every pass (dB)</h3><div id="signal"></div></div>
     </div>
   </section>
 </div>
