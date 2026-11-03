@@ -108,6 +108,7 @@ const ready = new Promise(res => map.on('load', () => {
   map.addLayer({ id: 'd_fill', type: 'fill', source: 'damage', paint: { 'fill-color': '#ff3b1f', 'fill-opacity': 0 } });
   map.addLayer({ id: 'd_line', type: 'line', source: 'damage', layout: round, paint: { 'line-color': '#fff4d6', 'line-width': 1.4, 'line-opacity': 0 } });
   map.addLayer({ id: 'd_dot', type: 'circle', source: 'dots', maxzoom: 13.6, paint: { 'circle-color': '#ff3b1f', 'circle-radius': ['+', 3.5, ['*', 1.8, ['sqrt', ['get', 'ha']]]], 'circle-stroke-color': '#fff', 'circle-stroke-width': 1.5, 'circle-opacity': 0, 'circle-stroke-opacity': 0 } });
+  selLayers(map);
   map.addLayer({ id: 'b_near', type: 'circle', source: 'near', paint: { 'circle-color': '#ffe066', 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 3, 15, 7], 'circle-stroke-color': '#111', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 10, 1.6, 15, 3] } });
   res();
 }));
@@ -132,23 +133,38 @@ function damageAlpha(k) {
 }
 
 /* Patch preview */
-let popup = null;
-function openPatch(id, m = map, fly) {
+const SEL = id => ['==', ['get', 'id'], id];
+function selLayers(m) {
+  m.addLayer({ id: 'sel_glow', type: 'line', source: 'damage', filter: SEL(-1), paint: { 'line-color': '#ffe066', 'line-width': 12, 'line-blur': 7, 'line-opacity': .9 } });
+  m.addLayer({ id: 'sel', type: 'line', source: 'damage', filter: SEL(-1), paint: { 'line-color': '#ffe066', 'line-width': 3 } });
+}
+function select(id) { [map, mapB].forEach(m => { if (m && m.getLayer('sel')) { m.setFilter('sel', SEL(id)); m.setFilter('sel_glow', SEL(id)); } }); }
+function closePatch() {
+  state.patch = null;
+  $('#pvcard').hidden = true;
+  select(-1);
+  document.querySelectorAll('[data-patch]').forEach(b => b.setAttribute('aria-current', 'false'));
+}
+function openPatch(id, m = map) {
   const p = PATCH[id];
   if (!p) return;
   state.patch = id;
   document.querySelectorAll('[data-patch]').forEach(b => b.setAttribute('aria-current', +b.dataset.patch === id));
   const tile = (r, k, label) => `<div class="chip" style="background-image:url(c/${id}.webp);background-position:${k * 100}% ${r * 50}%"><i>${label}</i></div>`;
   const pl = d => (d ? fmt(d) + (d === '2026-10-27' ? ', cloud' : '') : 'No image');
-  const html = `<div class="pv"><h3>Patch ${id}<span>${p.ha} ha</span></h3><div class="where">${p.where}${p.stream ? ', along a stream' : ''}</div>
+  const card = $('#pvcard');
+  card.innerHTML = `<button class="pvx" type="button" aria-label="Close">×</button><div class="pv"><h3>Patch ${id}<span>${p.ha} ha</span></h3><div class="where">${p.where}${p.stream ? ', along a stream' : ''}</div>
     <div class="pvg"><span></span><span class="h">Before</span><span class="h">After</span>
       <span class="s">Sentinel-1</span>${tile(0, 0, '18 Oct')}${tile(0, 1, '30 Oct')}
       <span class="s">Sentinel-2</span>${tile(1, 0, '23 Oct')}${tile(1, 1, '2 Nov, cloud')}
       <span class="s">PlanetScope</span>${tile(2, 0, pl(p.pb))}${tile(2, 1, pl(p.pa))}</div>
     <div class="facts">Radar signal fell ${Math.abs(p.dVV)} dB (VV) and ${Math.abs(p.dVH)} dB (VH). Height ${p.elev} m, slope ${p.slope}°.</div></div>`;
-  if (popup) popup.remove();
-  const show = () => { popup = new maplibregl.Popup({ maxWidth: '340px', offset: 12, focusAfterOpen: false }).setLngLat([p.clon, p.clat]).setHTML(html).addTo(m); };
-  if (fly) { m.flyTo({ center: [p.clon, p.clat], zoom: Math.max(m.getZoom(), 14.6), offset: [0, 150], duration: REDUCED ? 0 : 1200 }); m.once('moveend', show); } else show();
+  card.hidden = false;
+  card.querySelector('.pvx').onclick = closePatch;
+  select(id);
+  // keep the patch in the open part of the map, to the right of the card
+  const wide = $('#stage').clientWidth > 700;
+  m.easeTo({ center: [p.clon, p.clat], zoom: Math.max(m.getZoom(), 15), offset: wide ? [(card.offsetWidth + 14) / 2, 0] : [0, 0], duration: REDUCED ? 0 : 900 });
 }
 
 /* Frames for the timeline */
@@ -215,6 +231,7 @@ function ensureB() {
     mapB.addLayer({ id: 'ref', type: 'raster', source: 'ref', paint: { 'raster-fade-duration': 0 } });
     mapB.addLayer({ id: 'b_halo', type: 'line', source: 'damage', paint: { 'line-color': '#5c0000', 'line-width': 5, 'line-blur': 1.5, 'line-opacity': .6 } });
     mapB.addLayer({ id: 'b_out', type: 'line', source: 'damage', paint: { 'line-color': '#ff3b1f', 'line-width': 2.2 } });
+    selLayers(mapB); if (state.patch) select(state.patch);
     res();
   }));
   const sync = (a, b) => a.on('move', () => { if (syncing) return; syncing = true; b.jumpTo({ center: a.getCenter(), zoom: a.getZoom() }); syncing = false; });
@@ -293,7 +310,7 @@ $('#side').onclick = e => {
     el.setAttribute('aria-checked', !!on[el.dataset.layer]);
     return ready.then(applyLayers);
   }
-  if (el.dataset.patch) return openPatch(+el.dataset.patch, map, true);
+  if (el.dataset.patch) return openPatch(+el.dataset.patch, map);
   if (el.dataset.cs) {
     const s = el.dataset.sens, k = el.dataset.cs;
     state.cmp[k] = [s, s === 'sat' ? null : bestDate(s, k === 'b')];
@@ -308,7 +325,7 @@ function setTab(t) {
   state.tab = t;
   $('#app').dataset.tab = t;
   document.querySelectorAll('[data-tab]').forEach(b => b.getAttribute('role') === 'tab' && b.setAttribute('aria-selected', b.dataset.tab === t));
-  if (popup) popup.remove();
+  closePatch();
   pause();
   $('#event').hidden = true; tl.ev = undefined;
   const cmp = t === 'compare';
