@@ -158,7 +158,7 @@ function openPatch(id, m = map) {
       <span class="s">Sentinel-1</span>${tile(0, 0, '18 Oct')}${tile(0, 1, '30 Oct')}
       <span class="s">Sentinel-2</span>${tile(1, 0, '23 Oct')}${tile(1, 1, '2 Nov, cloud')}
       <span class="s">PlanetScope</span>${tile(2, 0, pl(p.pb))}${tile(2, 1, pl(p.pa))}</div>
-    <div class="facts">Radar signal fell ${Math.abs(p.dVV)} dB (VV) and ${Math.abs(p.dVH)} dB (VH). Height ${p.elev} m, slope ${p.slope}°.</div></div>`;
+    <div class="facts">Radar signal fell ${Math.abs(p.dVV)} dB (VV) and ${Math.abs(p.dVH)} dB (VH). Height ${p.elev} m, slope ${p.slope}°. Each view is ${p.chip} m across.</div></div>`;
   card.hidden = false;
   card.querySelector('.pvx').onclick = closePatch;
   select(id);
