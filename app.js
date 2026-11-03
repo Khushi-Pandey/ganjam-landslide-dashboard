@@ -50,6 +50,11 @@ const on = { damage: 1, near: 1, bld: 1, river: 1, road: 1, label: 1, outline: 1
 const state = { tab: 'timeline', base: 's1', cmp: { a: ['s1', '2026-10-18'], b: ['s1', '2026-10-30'] }, patch: null };
 const tl = { t: dayOf(new URLSearchParams(location.search).get('d') || '2026-10-12'), playing: false, speed: 1, last: 0, ready: {}, shown: {}, ev: undefined, day: null, dk: -1 };
 const PATCH = Object.fromEntries(GEO.damage.features.map(f => [f.properties.id, f.properties]));
+const PBBOX = Object.fromEntries(GEO.damage.features.map(f => {
+  const pts = f.geometry.coordinates.flat(f.geometry.type === 'Polygon' ? 1 : 2);
+  const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]);
+  return [f.properties.id, [[Math.min(...xs), Math.min(...ys)], [Math.max(...xs), Math.max(...ys)]]];
+}));
 
 /* Maps */
 function makeMap(container) {
@@ -122,11 +127,11 @@ function applyLayers() {
 }
 function damageAlpha(k) {
   if (!map.getLayer('d_fill')) return;
-  map.setPaintProperty('d_heat', 'heatmap-opacity', ['interpolate', ['linear'], ['zoom'], 12.8, .9 * k, 15, 0]);
-  map.setPaintProperty('d_halo', 'line-opacity', .6 * k);
-  map.setPaintProperty('d_fill', 'fill-opacity', .82 * k);
-  map.setPaintProperty('d_line', 'line-opacity', k);
-  map.setPaintProperty('d_dot', 'circle-opacity', ['interpolate', ['linear'], ['zoom'], 12.8, k, 13.6, 0]);
+  map.setPaintProperty('d_heat', 'heatmap-opacity', ['interpolate', ['linear'], ['zoom'], 12.8, .78 * k, 15, 0]);
+  map.setPaintProperty('d_halo', 'line-opacity', .45 * k);
+  map.setPaintProperty('d_fill', 'fill-opacity', .68 * k);
+  map.setPaintProperty('d_line', 'line-opacity', .85 * k);
+  map.setPaintProperty('d_dot', 'circle-opacity', ['interpolate', ['linear'], ['zoom'], 12.8, .85 * k, 13.6, 0]);
   map.setPaintProperty('d_dot', 'circle-stroke-opacity', ['interpolate', ['linear'], ['zoom'], 12.8, k, 13.6, 0]);
   map.setPaintProperty('b_near', 'circle-opacity', k);
   map.setPaintProperty('b_near', 'circle-stroke-opacity', k);
@@ -135,7 +140,7 @@ function damageAlpha(k) {
 /* Patch preview */
 const SEL = id => ['==', ['get', 'id'], id];
 function selLayers(m) {
-  m.addLayer({ id: 'sel_glow', type: 'line', source: 'damage', filter: SEL(-1), paint: { 'line-color': '#ffe066', 'line-width': 12, 'line-blur': 7, 'line-opacity': .9 } });
+  m.addLayer({ id: 'sel_glow', type: 'line', source: 'damage', filter: SEL(-1), paint: { 'line-color': '#ffe066', 'line-width': 12, 'line-blur': 7, 'line-opacity': .7 } });
   m.addLayer({ id: 'sel', type: 'line', source: 'damage', filter: SEL(-1), paint: { 'line-color': '#ffe066', 'line-width': 3 } });
 }
 function select(id) { [map, mapB].forEach(m => { if (m && m.getLayer('sel')) { m.setFilter('sel', SEL(id)); m.setFilter('sel_glow', SEL(id)); } }); }
@@ -162,9 +167,9 @@ function openPatch(id, m = map) {
   card.hidden = false;
   card.querySelector('.pvx').onclick = closePatch;
   select(id);
-  // keep the patch in the open part of the map, to the right of the card
-  const wide = $('#stage').clientWidth > 700;
-  m.easeTo({ center: [p.clon, p.clat], zoom: Math.max(m.getZoom(), 15), offset: wide ? [(card.offsetWidth + 14) / 2, 0] : [0, 0], duration: REDUCED ? 0 : 900 });
+  // zoom so the patch fills the open part of the map, right of the card
+  const wide = $('#stage').clientWidth > 700, cw = card.offsetWidth + 28;
+  m.fitBounds(PBBOX[id], { padding: wide ? { left: cw + 150, right: 170, top: 170, bottom: 170 } : { left: 60, right: 60, top: 60, bottom: 280 }, maxZoom: 16.4, duration: REDUCED ? 0 : 1000 });
 }
 
 /* Frames for the timeline */
@@ -230,7 +235,7 @@ function ensureB() {
     mapB.addSource('damage', { type: 'geojson', data: GEO.damage });
     mapB.addLayer({ id: 'ref', type: 'raster', source: 'ref', paint: { 'raster-fade-duration': 0 } });
     mapB.addLayer({ id: 'b_halo', type: 'line', source: 'damage', paint: { 'line-color': '#5c0000', 'line-width': 5, 'line-blur': 1.5, 'line-opacity': .6 } });
-    mapB.addLayer({ id: 'b_out', type: 'line', source: 'damage', paint: { 'line-color': '#ff3b1f', 'line-width': 2.2 } });
+    mapB.addLayer({ id: 'b_out', type: 'line', source: 'damage', paint: { 'line-color': '#ff3b1f', 'line-width': 2.2, 'line-opacity': .85 } });
     selLayers(mapB); if (state.patch) select(state.patch);
     res();
   }));
